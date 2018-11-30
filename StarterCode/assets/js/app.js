@@ -31,10 +31,7 @@ d3.csv("assets/data/data.csv").then(function(data, error) {
     data.forEach(function(data) {
       data.poverty = +data.poverty;
       data.healthcareLow = +data.healthcareLow;
-      data.income = +data.income;
-      data.age = +data.age;
-      data.obesity = +data.obesity;
-      data.smokes = +data.smokes;
+      
       //data.abbr = data.abbr;
       console.log(data);
     });
@@ -46,49 +43,25 @@ d3.csv("assets/data/data.csv").then(function(data, error) {
       .domain([8.5, d3.max(data, d => d.poverty)])
       .range([0, width]);
 
-    var xLinearScaleAge = d3.scaleLinear()
-      .domain([8.5, d3.max(data, d => d.age)])
-      .range([0, width]);
-
-    var xLinearScaleIncome = d3.scaleLinear()
-      .domain([8.5, d3.max(data, d => d.income)])
-      .range([0, width]);
-
     var yLinearScale = d3.scaleLinear()
       .domain([0, d3.max(data, d => d.healthcareLow)])
-      .range([height, 0]);
-
-    var yLinearScaleSmokes = d3.scaleLinear()
-      .domain([0, d3.max(data, d => d.smokes)])
-      .range([height, 0]);
-
-    var yLinearScaleObesity = d3.scaleLinear()
-      .domain([0, d3.max(data, d => d.obesity)])
       .range([height, 0]);
 
     // Step 3: Create axis functions
     // ==============================
     var bottomAxis = d3.axisBottom(xLinearScale);
-    var bottomAxisAge = d3.axisBottom(xLinearScaleAge);
-    var bottomAxisIncome = d3.axisBottom(xLinearScaleIncome);
-
+   
     var leftAxis = d3.axisLeft(yLinearScale);
-    var leftAxisSmokes = d3.axisLeft(yLinearScaleSmokes);
-    var leftAxisObesity = d3.axisLeft(yLinearScaleObesity);
-
+    
     // Step 4: Append Axes to the chart
     // ==============================
     chartGroup.append("g")
       .attr("transform", `translate(0, ${height})`)
       .call(bottomAxis)
-      .call(bottomAxisAge)
-      .call(bottomAxisIncome);
-
+      
     chartGroup.append("g")
       .call(leftAxis)
-      .call(leftAxisSmokes)
-      .call(leftAxisObesity);
-
+      
     // Step 5: Create Circles
     // ==============================
     var circlesGroup = chartGroup.selectAll("circle")
@@ -119,7 +92,7 @@ d3.csv("assets/data/data.csv").then(function(data, error) {
     // ==============================
     var toolTip = d3.tip()
       .attr("class", "d3-tip")
-      //.offset(-10,-60)
+      .offset(-10,-60)
       .html(function(d) {
         return (`${d.state}<br>Poverty: ${d.poverty}%<br>No Health Insurance: ${d.healthcareLow}%`);
       });
